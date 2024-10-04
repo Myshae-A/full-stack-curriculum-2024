@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myshae Allen Resume</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .profile_image {
+            margin-right: 20px;
+        }
+        .profile_image img {
+            width: 200px;
+            height: 300px;
+        }
+        .profile_name {
+            margin: 0;
+            font-size: 24px;
+        }
+        .profile_title {
+            font-size: 18px;
+            color: #555;
+        }
+        .description {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile">
+            <div class="profile_container">
+                <div class="profile_image">
+                    <img src="./Myshae Allen Headshot.jpg" alt="Myshae Allen"
+                    width="200" height="300">
+                </div>
+                <div>
+                    <h1 class="profile_name">
+                        Myshae Allen
+                    </h1>
+                    <p class="profile_title">Engineering New Fellow</p>
+                    <p class="description">
+                        To know wisdom and instruction, To perceive the words of understanding,
+                        <br>To receive the instruction of wisdom,
+                        <br>Justice, judgment, and equity;
+                        <br>To give prudence to the simple,
+                        <br>To the young man knowledge and discretion<code>&#8212;</code>
+                        <br>A wise man will hear and increase learning,
+                        <br>And a man of understanding will attain wise counsel,
+                        <br>To understand a proverb and an enigma,
+                        <br>The words of the wise and their riddles.
+                        <br>The fear of the LORD is the beginning of knowledge,
+                        <br>But fools despise wisdom and instruction.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const padding = 20;
+            // Dynamically adjust the margin-left of the description
+            const profileImage = document.querySelector('.profile_image img');
+            const description = document.querySelector('.description');
+
+            // Wait for the image to load before calculating its width
+            profileImage.onload = function() {
+                const imageWidth = profileImage.offsetWidth;
+                description.style.marginLeft = (imageWidth + padding) + 'px';
+            };
+        </script>
+
+</body>
+</html>
