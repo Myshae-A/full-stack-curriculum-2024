@@ -1,0 +1,31 @@
+
+.organized {
+    background-color: lightgrey;
+    width: 60%;
+    padding: .5em;
+    margin: 20px;
+    border-radius: .3em;
+}
+
+.container {
+    padding: .5em;
+}
+
+.profile_image img {
+    padding: .5em;
+    width: 200px; /* Adjust to your desired size */
+    height: 200px; /* Make sure width and height are equal */
+    border-radius: 50%; /* This makes the image circular */
+    object-fit: cover; /* Ensures the image scales properly without distortion */
+    object-position: top;/* margin-top: -10%; */
+}
+
+.profile {
+    display: flex; /* Aligns items horizontally */
+    align-items: center; /* Aligns the text vertically centered to the image */
+
+}
+
+.profile_description {
+    padding-left: 2.5%;
+}
