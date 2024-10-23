@@ -24,13 +24,30 @@
 
     <script>
         // Example #1: Button Click Event
+        let buttonElement = document.querySelector('.button')
+
+        buttonElement.addEventListener("click", clickButtonDemo)
+        // Common error: buttonElement.addEventListener("click", (clickButtonDemo())); <== where you have the extra parenthesis is WRONG
+
+        function clickButtonDemo () {
+            console.log("Hello world! Button was clicked.")
+        }
     </script>
 
     <!-- Example #2: Input Keyup Event -->
     <input type="text" placeholder="Type something">
 
+
+
     <script>
         // Example #2: Input Keyup Event
+        let inputElement = document.querySelector('input')
+
+        inputElement.addEventListener("keyup", captureInput) // should only pass in reference to the function and NOT pass in captureInput(e) here...
+
+        function captureInput(e) {
+            console.log("The text is: "+ e.target.value)
+        }
     </script>
 
     <!-- Example #3: Mouse Enter Event -->
@@ -39,9 +56,14 @@
     <script>
         // Example #3: Mouse Enter Event
 
+        let creativeDivElement = document.querySelector(".creative-div")
+
+        creativeDivElement.addEventListener("mouseenter", changeSomething)
+
         function changeSomething() {
             const colors = ["red", "green", "blue", "orange", "purple"];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
             creativeDivElement.style.backgroundColor = randomColor;
         }
     </script>

@@ -20,6 +20,34 @@
   img[src] {
     display: block;
   }
+
+  #main-contents {
+    margin: 10%;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: rgba(30, 143, 255, 0);
+  }
+
+  .cardHeader {
+    margin-top: 10%;
+  }
+
+  .cardFooter {
+    margin-bottom: 10%;
+  }
+
+
+
+  .weatherCard {
+    background-color: white;
+    border-radius: 3%;
+    margin: 2%;
+    text-align: center;
+    width: 20%;
+  }
   
   #main-container {
     height: 100%;
@@ -27,7 +55,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: left;
     background-color: #87b7ff;
   }
   

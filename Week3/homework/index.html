@@ -9,13 +9,52 @@
 
 <body>
 	<div id='main-container'>
-		<div id='weather-container'>
-		</div> 
+		<div id="main-contents">
+			<h1>sunny</h1>
+			<div id='weather-container'>
+				<h2>testweather</h2>
+				// image of sun
+				const element = document.createElement('h1');
+			</div> 
+
+			<div class="flex-container">
+				<div class="weatherCard">
+					<h5 class="cardHeader">monday 15</h5>
+					<img src="./icons/01d.svg" alt="test">
+					<h5 class="cardFooter">97 to 65</h5>
+				</div>
+				<div class="weatherCard">
+					<h5 class="cardHeader">monday 15</h5>
+					<img src="./icons/01d.svg" alt="test">
+					<h5 class="cardFooter">97 to 65</h5>
+				</div>
+				<div class="weatherCard">
+					<h5 class="cardHeader">monday 15</h5>
+					<img src="./icons/01d.svg" alt="test">
+					<h5 class="cardFooter">97 to 65</h5>
+				</div>
+				<div class="weatherCard">
+					<h5 class="cardHeader">monday 15</h5>
+					<img src="./icons/01d.svg" alt="test">
+					<h5 class="cardFooter">97 to 65</h5>
+				</div>
+				<div class="weatherCard">
+					<h5 class="cardHeader">monday 15</h5>
+					<img src="./icons/01d.svg" alt="test">
+					<h5 class="cardFooter">97 to 65</h5>
+				</div>
+			</div>
+		</div>
+		
+		
 	</div>
 	<div id='side-container'>
 		<div>
 			<input id='search-input' placeholder='search for a city'></input>
 			<button id='search-button' onclick="search()">search</button>
+
+
+
 		</div>
 		<ul id='search-results-list'></ul>
 	</div>
@@ -23,7 +62,7 @@
 
 <script>
 		// USE YOUR OWN API KEY
-		const apiKey = "";
+		const apiKey = "bb2e20a2bf23804832b23dee948d9816";
 
         // variable that stores the city that is chosen
 		let city;
@@ -31,6 +70,8 @@
 		let weather;
         // the variable that stores the air quality index for the city
 		let aqi;
+
+		let numDays = 5;
 
 		// function that accepts that a number N and returns the name of the day and the date N days from now as a string
 		function formatDate(daysFromNow = 0) {
@@ -62,7 +103,7 @@
 			}
 		}
 
-		// function that renders the search results as a unordered list
+		// function that renders the search results as an unordered list
 		function renderSearchResults(searchResults) {
 				// selects the unordered list element search-results-list
 				const ul = document.querySelector('#search-results-list')
@@ -100,8 +141,57 @@
 				lon: lon
 			}
 			//printing the city object to the console
-			console.log(city);
+			console.log(city)
+
             // BEGIN CODING HERE
+
+			// Get the current date
+			const currentDate = new Date();
+    		console.log("Current Date:", currentDate.getDate());
+
+
+			fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('Weather data could not be fetched');
+				}
+				return response.json();
+			})
+			.then(data => {
+
+				let todaysDateIndex = currentDate.getDate();
+				let text = "";
+				// Display or process the current weather and 5-day forecast data
+				console.log("Current day:", todaysDateIndex);
+				// console.log("Current Weather:", data.list[todaysDateIndex].main.temp);
+				// console.log("5-day(2) Forecast:", data.list[todaysDateIndex+1].main.temp); // First 5 days from the daily forecast
+				// console.log("5-day(3) Forecast:", data.list[todaysDateIndex+2].main.temp);
+				// console.log("5-day(4) Forecast:", data.list[todaysDateIndex+3].main.temp);
+				// console.log("5-day(5) Forecast:", data.list[todaysDateIndex+4].main.temp);
+
+				for (let i = todaysDateIndex; i < todaysDateIndex + 5; i++) {
+					console.log("Current Weather:"+data.list[i].main.temp);
+					text += "Current Weather:"+data.list[i].main.temp + "<br>";
+				}
+				console.log(text);
+
+				// You can update your HTML with the weather data here
+			})
+			.catch(error => {
+				console.error('Error fetching weather data:', error);
+			});
+			;
+
+			const weatherCards = document.querySelectorAll('.weatherCard');
+
+			weatherCards.forEach(weatherCard => {
+
+				weatherCard.querySelector(".cardHeader").innerText = "test"+data.list[todaysDateIndex+3].main.temp;
+			});
+
 		}
+
+
+		
 	</script>
 </html>
