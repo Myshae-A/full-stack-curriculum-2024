@@ -10,38 +10,36 @@
 <body>
 	<div id='main-container'>
 		<div id="main-contents">
-			<h1>sunny</h1>
+			<h1>Date</h1>
 			<div id='weather-container'>
-				<h2>testweather</h2>
-				// image of sun
-				const element = document.createElement('h1');
+				<h2>City</h2>
 			</div> 
 
 			<div class="flex-container">
 				<div class="weatherCard">
-					<h5 class="cardHeader">monday 15</h5>
+					<h5 class="cardHeader">Day 1</h5>
 					<img src="./icons/01d.svg" alt="test">
-					<h5 class="cardFooter">97 to 65</h5>
+					<h5 class="cardFooter">-- to --</h5>
 				</div>
 				<div class="weatherCard">
-					<h5 class="cardHeader">monday 15</h5>
+					<h5 class="cardHeader">Day 2</h5>
 					<img src="./icons/01d.svg" alt="test">
-					<h5 class="cardFooter">97 to 65</h5>
+					<h5 class="cardFooter">-- to --</h5>
 				</div>
 				<div class="weatherCard">
-					<h5 class="cardHeader">monday 15</h5>
+					<h5 class="cardHeader">Day 3</h5>
 					<img src="./icons/01d.svg" alt="test">
-					<h5 class="cardFooter">97 to 65</h5>
+					<h5 class="cardFooter">-- to --</h5>
 				</div>
 				<div class="weatherCard">
-					<h5 class="cardHeader">monday 15</h5>
+					<h5 class="cardHeader">Day 4</h5>
 					<img src="./icons/01d.svg" alt="test">
-					<h5 class="cardFooter">97 to 65</h5>
+					<h5 class="cardFooter">-- to --</h5>
 				</div>
 				<div class="weatherCard">
-					<h5 class="cardHeader">monday 15</h5>
+					<h5 class="cardHeader">Day 5</h5>
 					<img src="./icons/01d.svg" alt="test">
-					<h5 class="cardFooter">97 to 65</h5>
+					<h5 class="cardFooter">-- to --</h5>
 				</div>
 			</div>
 		</div>
@@ -140,15 +138,8 @@
 				lat: lat,
 				lon: lon
 			}
-			//printing the city object to the console
-			console.log(city)
 
             // BEGIN CODING HERE
-
-			// Get the current date
-			const currentDate = new Date();
-    		console.log("Current Date:", currentDate.getDate());
-
 
 			fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`)
 			.then(response => {
@@ -159,23 +150,35 @@
 			})
 			.then(data => {
 
-				let todaysDateIndex = currentDate.getDate();
-				let text = "";
-				// Display or process the current weather and 5-day forecast data
-				console.log("Current day:", todaysDateIndex);
-				// console.log("Current Weather:", data.list[todaysDateIndex].main.temp);
-				// console.log("5-day(2) Forecast:", data.list[todaysDateIndex+1].main.temp); // First 5 days from the daily forecast
-				// console.log("5-day(3) Forecast:", data.list[todaysDateIndex+2].main.temp);
-				// console.log("5-day(4) Forecast:", data.list[todaysDateIndex+3].main.temp);
-				// console.log("5-day(5) Forecast:", data.list[todaysDateIndex+4].main.temp);
+				//console.log(city.name)
+				
+				// Get the current date
+				// const currentDate = new Date();
+				// const dayNum = currentDate.getDate();
+				// console.log("testCurrent Date:", dayNum);
 
-				for (let i = todaysDateIndex; i < todaysDateIndex + 5; i++) {
-					console.log("Current Weather:"+data.list[i].main.temp);
-					text += "Current Weather:"+data.list[i].main.temp + "<br>";
-				}
-				console.log(text);
+				const forecastList = data.list;
+				const currentTimestamp = forecastList[0].dt_txt;
+				// Convert the date string to a JavaScript Date object
+				const date = new Date(currentTimestamp);
+				const options = { month: 'long', day: 'numeric' };
+				const formattedDate = date.toLocaleDateString('en-US', options);
 
-				// You can update your HTML with the weather data here
+				// console.log(formattedDate);
+
+				document.getElementById("weather-container").innerHTML = `<h1>${city.name}</h1>`; //KEEP
+				
+				document.querySelector("#main-contents h1").innerText = formattedDate; // KEEP
+
+				weatherCards.forEach((weatherCard, index) => { // doesn't work because index only increases by 3 hours, not by 1 day...
+					if (forecastList[index]) {
+						const dateText = new Date(forecastList[index].dt_txt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+						const temp = forecastList[index].main.temp;
+						weatherCard.querySelector(".cardHeader").innerText = `${dateText}`;
+						weatherCard.querySelector(".cardFooter").innerText = `${temp}°F`; // Update temperature
+					}
+				});
+
 			})
 			.catch(error => {
 				console.error('Error fetching weather data:', error);
@@ -184,10 +187,7 @@
 
 			const weatherCards = document.querySelectorAll('.weatherCard');
 
-			weatherCards.forEach(weatherCard => {
-
-				weatherCard.querySelector(".cardHeader").innerText = "test"+data.list[todaysDateIndex+3].main.temp;
-			});
+			
 
 		}
 

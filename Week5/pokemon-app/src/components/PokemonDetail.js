@@ -5,6 +5,8 @@ import { Typography } from "@mui/material";
 
 function PokemonDetail() {
 
+  const {name} = useParams()
+  const [pokemon, setPokemon] = useState(null)
 
   const imageUrl = 'https://placehold.co/400'
 
