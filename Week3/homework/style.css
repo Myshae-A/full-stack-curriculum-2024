@@ -38,13 +38,33 @@
   .cardFooter {
     margin-bottom: 10%;
   }
+
+  .cardImage {
+    src: "./icons/01n.svg";
+  }
   
   .weatherCard {
     background-color: white;
+    border-color: black;
     border-radius: 3%;
-    margin: 2%;
+    margin: 1%;
     text-align: center;
-    width: 20%;
+    width: 50%;
+    height: 23vh;
+  }
+
+  #todaysTemp {
+    font-size: 500%;
+  }
+
+  #below-weather-container {
+    height: 90%;
+    width: 40%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    justify-content: baseline;
+    align-items: center;
   }
   
   #main-container {
