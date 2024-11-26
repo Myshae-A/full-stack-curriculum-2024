@@ -53,6 +53,7 @@ function MainContainer(props) {
       
       // Create the API URL using the city coordinates (lat, lon)
       require('dotenv').config(); // Load environment variables
+      console.log(process.env.API_KEY);
       const apiKey = process.env.API_KEY; // Replace with your actual API key
       const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
 
