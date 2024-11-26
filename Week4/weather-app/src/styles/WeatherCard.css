@@ -1,0 +1,23 @@
+
+  .cardHeader {
+    margin-top: 10%;
+  }
+
+  .cardFooter {
+    margin-bottom: 10%;
+  }
+
+  .cardImage {
+    src: "./icons/01n.svg";
+    width: 75%;
+  }
+  
+  .weatherCard {
+    background-color: white;
+    border-color: black;
+    border-radius: 3%;
+    margin: 1%;
+    text-align: center;
+    width: 50%;
+    height: 60%;
+  }

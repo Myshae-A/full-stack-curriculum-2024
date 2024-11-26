@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
+import { auth, googleProvider} from "./fireBaseConfig";
+
+
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider
+} from 'firebase/auth';
 
 function App() {
   // Separate state variables for login and signup
@@ -12,19 +22,51 @@ function App() {
   const handleLogin = async (e) => {
     e.preventDefault();
     // TODO: Add Firebase login with email/password functionality here.
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
+      setUser(userCredential.user)
+      console.log('LOGIN SUCCESS'+userCredential.user)
+    } catch (error) {
+      console.error("LOGIN ERROR: ", error.message)
+    }
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
     // TODO: Add Firebase signup with email/password functionality here.
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+      setUser(userCredential.user)
+      console.log('ACCOUNT CREATED: '+userCredential.user)
+    } catch (error) {
+      console.error("SIGNUP ERROR: ", error.message)
+    }
+
+    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+
   };
 
   const handleGoogleSignIn = async () => {
     // TODO: Add Firebase Google sign-in functionality here.
+    try {
+      const userCredential = await signInWithPopup(auth, googleProvider)
+      setUser(userCredential.user)
+      console.log('ACCOUNT CREATED WITH GOOGLE: '+userCredential.user)
+    } catch (error) {
+      console.error("SIGNUP WITH GOOGLE ERROR: ", error.message)
+    }
   };
 
   const handleLogout = async () => {
     // TODO: Add Firebase logout functionality here.
+    try {
+      await signOut(auth)
+      setUser(null)
+      console.log("LOGGED OUT SUCCESSFULLY")
+    } catch (error) {
+      console.error("SIGNOUT ERROR: ", error.message)
+    }
+    await signOut(auth)
   };
 
   return (

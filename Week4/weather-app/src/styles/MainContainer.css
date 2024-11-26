@@ -13,4 +13,5 @@
 #weather-container {
   height: 60%;
   width: 90%;
+  display: flex;
 }

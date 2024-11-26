@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/MainContainer.css"; // Import the CSS file for MainContainer
+import WeatherCard from "./WeatherCard";
+// import multiple pngs, import city.name print out header, format, names of days are only capitalized for first letter
 
 function MainContainer(props) {
 
@@ -28,7 +30,8 @@ function MainContainer(props) {
   (e.g., 'weather') and its corresponding setter function (e.g., 'setWeather'). The initial state can be 
   null or an empty object.
   */
-  
+
+  const [weather, setWeather] = useState(null);
   
   /*
   STEP 3: Fetch Weather Data When City Changes.
@@ -43,10 +46,48 @@ function MainContainer(props) {
   After fetching the data, use the 'setWeather' function from the 'useState' hook to set the weather data 
   in your state.
   */
+  useEffect(() => {
+    // Check if the city prop is provided
+    if (props.city) {
+      const { lat, lon, name } = props.city;
+      
+      // Create the API URL using the city coordinates (lat, lon)
+      const apiKey = "bb2e20a2bf23804832b23dee948d9816"; // Replace with your actual API key
+      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+
+      // Fetch weather data
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          // Set the weather data in the state
+          setWeather(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching weather data:", error);
+        });
+    }
+  }, [props.city]);
   
   
+  function getWeather(index) {
+    console.log(weather);
+    const data = {
+      imgSrc: weather["list"][index]["weather"][0]["icon"],
+      minTemp: weather["list"][index]["main"]["temp_min"],
+      maxTemp: weather["list"][index]["main"]["temp_max"],
+      currentDay: formatDate(index)
+    }
+    console.log(JSON.stringify(data));
+    return data;
+  }
+
+ 
+ 
   return (
     <div id="main-container">
+      <h1>
+        Weather For Today
+      </h1>
       <div id="weather-container">
         {/* 
         STEP 4: Display Weather Data.
@@ -58,7 +99,23 @@ function MainContainer(props) {
         Break down the data object and figure out what you want to display (e.g., temperature, weather description).
         This is a good section to play around with React components! Create your own - a good example could be a WeatherCard
         component that takes in props, and displays data for each day of the week.
-        */}
+        */
+        
+
+
+          weather ? 
+          (
+            <>
+              <WeatherCard data={getWeather(0)}/>
+              <WeatherCard data={getWeather(1)}/>
+              <WeatherCard data={getWeather(2)}/>
+              <WeatherCard data={getWeather(3)}/>
+              <WeatherCard data={getWeather(4)}/>
+            </>
+            
+          ) : null
+          
+        }
       </div>
     </div>
   );

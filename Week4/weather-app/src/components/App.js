@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/App.css'; // Import the CSS file for App
 
 import MainContainer from './MainContainer';
@@ -17,6 +17,7 @@ function App() {
   function (e.g., 'setSelectedCity'). The initial state can be an empty object or null.
   */
   
+  const [selectedCity, setSelectedCity] = useState(null);
   
 
   /*
@@ -26,8 +27,14 @@ function App() {
   that takes city data as its argument and uses the setter function from the 'useState' hook to update the 
   state of the selected city. This function will be passed to SideContainer as a prop.
   */
+  function updateCityData(city) {
+    setSelectedCity(city);
+  }
   
-  
+  // useEffect(() => {
+  //   SideContainer.search("Austin");
+  // },[]);
+
   return (
     <div className="app-container">
       {/* 
@@ -40,8 +47,8 @@ function App() {
       allows MainContainer to display the weather for the selected city.
       */}
       
-      <MainContainer apiKey={apiKey} /* Pass the selected city data as props to 'MainContainer' */ />
-      <SideContainer apiKey={apiKey} /* Pass the city data update function as a prop to 'SideContainer' */ />
+      <MainContainer apiKey={apiKey} city={selectedCity}/* Pass the selected city data as props to 'MainContainer' */ />
+      <SideContainer apiKey={apiKey} updateCityData={updateCityData}/* Pass the city data update function as a prop to 'SideContainer' */ />
     </div>
   );
 }

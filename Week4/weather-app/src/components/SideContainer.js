@@ -9,11 +9,15 @@ function SideContainer(props) {
     if (searchInput) {
       // creates the API call with the value from the search input as a query
       let apiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${searchInput},,US&limit=5&appid=${props.apiKey}`;
+      console.log("print");
       // calls the API
       fetch(apiCall)
         .then((response) =>
-          // after recieving a response, take the response from the server and convert it to JSON
-          response.json()
+        // after recieving a response, take the response from the server and convert it to JSON
+        {
+
+          return response.json()
+        }
         )
         .then((data) => {
           // after recieving the converted JSON data, pass the JSON to the renderSearchResults() function
@@ -86,8 +90,10 @@ function SideContainer(props) {
   function selectCity(fullName, name, state, lat, lon) {
     // hides the search-results-list since it is not needed right now
     document.querySelector("#search-results-list").className = "hidden";
+    console.log("selectCity")
     // sets the global city variable
     document.querySelector("#search-input").value = "";
+    
     let city = {
       fullName: fullName,
       name: name,
@@ -95,7 +101,8 @@ function SideContainer(props) {
       lat: lat,
       lon: lon,
     };
-    console.log(city);
+    console.log(city.name);
+    props.updateCityData(city);
   }
 
   return (
