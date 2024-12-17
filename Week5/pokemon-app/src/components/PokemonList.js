@@ -6,12 +6,12 @@ import PokemonCard from "./PokemonCard";
 
 function PokemonList() {
 
-  const [pokemons, setPokemon] = useState([])
+  const [pokemons, setPokemons] = useState([]) // initialized to an empty array
 
   function fetchPokemon() {
-    axios.get("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
+    axios.get("https://pokeapi.co/api/v2/pokemon?limit=151")
     .then((response) => {
-      setPokemon(response.data.results)
+      setPokemons(response.data.results)
       console.log(response.data.results)
     })
   }
@@ -21,11 +21,11 @@ function PokemonList() {
   },[])
 
   return (
-    <Grid2>
+    <Grid2 container justifyContent="center">
       {
-        pokemons.map((pokemon, index) => {
+        pokemons.map((pokemon, index) => (
           <PokemonCard key={pokemon.name} pokemon={pokemon} index={index+1}/>
-        })
+        ))
       }
     </Grid2>
   );

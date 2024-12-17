@@ -5,7 +5,8 @@ import { ThemeContext } from './context/ThemeContext';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import { WbSunny, NightsStay } from '@mui/icons-material';
 
-import PokemonList from './components/PokemonList';
+import PokemonList from './components/PokemonList.js';
+import PokemonDetail from './components/PokemonDetail.js';
 
 function App() {
 
@@ -13,8 +14,8 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppBar>
-        <Toolbar>
+      <AppBar position='sticky'>
+        <Toolbar> 
           <Typography variant='h6' sx={{flexGrow: 1}}>
             Pokedex App
           </Typography>
@@ -25,6 +26,7 @@ function App() {
       </AppBar>
       <Routes>
         <Route path='/' element={<PokemonList/>}/>
+        <Route path='/:name' element={<PokemonDetail/>}/>
       </Routes>
     </ThemeProvider>
   );

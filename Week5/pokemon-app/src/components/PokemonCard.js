@@ -14,12 +14,12 @@ function PokemonCard(props) {
 
   return (
     <Card sx={{ margin: 1 }}>
-      <CardActionArea>
-        <CardMedia component="img" image={imageUrl}>
+      <CardActionArea component={Link} to={`${pokemonName}`}>
+        <CardMedia component="img" height="120" image={imageUrl}>
         </CardMedia>
         <CardContent>
           <Typography>
-            {pokemonName.charAt(0).toUpperCase() + pokemonName}
+            {pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)}
           </Typography>
         </CardContent>
     </CardActionArea>
