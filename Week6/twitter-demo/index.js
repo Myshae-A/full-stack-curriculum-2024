@@ -52,11 +52,11 @@ app.get("/", (req, res) => {
 // get all tweets
 app.get("/api/tweets", async (req, res) => {
     const tweetsSnapshot = await db.collection("tweets").get();
-    const tweets = tweetsSnapshot.docs.map(doc => ({
+    const databaseTweets = tweetsSnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
-    res.json(tweets);
+    res.json(databaseTweets);
 });
 
 // get tweets by user (param in route)
