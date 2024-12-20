@@ -19,13 +19,13 @@ app.use(bodyParser.json());
 // Your API routes will go here...
 app.use(express.json())
 
-let users = {
-  0: {
-    finished: false,
-    task: "Wash dishes",
-    user: "mrTest"
-  },
-}
+// let users = {
+//   0: {
+//     finished: false,
+//     task: "Wash dishes",
+//     user: "mrTest"
+//   },
+// }
 
 // GET: Endpoint to retrieve all tasks
 app.get("/tasks", async (req, res) => {
@@ -79,6 +79,10 @@ app.post("/tasks", async (req, res) => {
 // DELETE: Endpoint to remove a task
 app.delete('/tasks/:taskId', async (req, res) => {
   const taskId = req.params.taskId;
+  if(tasks(taskId) === undefined) {
+    res.status(404).send('Task not found');
+    return;
+  }
   tasks = tasks.filter(task => task.id !== taskId);
   res.status(200).send(`taskId: ${taskId} is deleted`);
 });

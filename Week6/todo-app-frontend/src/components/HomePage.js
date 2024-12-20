@@ -18,6 +18,7 @@ import { useAuth } from '../contexts/AuthContext';
 export default function HomePage() {
   const navigate = useNavigate();
   const {currentUser} = useAuth();
+  console.log(currentUser)
 
   // State to hold the list of tasks.
   const [taskList, setTaskList] = useState([]);
