@@ -60,8 +60,20 @@ app.get('/tasks/:userId', async (req, res) => {
 // POST: Endpoint to add a new task
 app.post("/tasks", async (req, res) => {
   const newTask = req.body;
-  tasks.push(newTask);
-  res.status(201).send(newTask);
+  try {
+    console.log("starting try")
+    // Adding the new task to the "tasks" collection in Firestore
+    const docRef = await db.collection("tasks").add(newTask);
+    // Sending a successful response with the new task ID
+    res.status(201).send("worked! "+{ id: docRef.id, ...newTask });
+
+    console.log("ending try")
+
+  } catch (error) {
+    console.log("starting catch")
+    // Sending an error response in case of an exception
+    res.status(500).send(error.message);
+  }
 });
 
 // DELETE: Endpoint to remove a task
