@@ -1,6 +1,11 @@
 // Importing Firebase Admin SDK to interact with Firebase services
-const admin = require("firebase-admin");
-require("dotenv").config();
+// const admin = require("firebase-admin");
+import admin from 'firebase-admin';
+
+// require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 // Parsing the FIREBASE_CREDENTIALS environment variable from a string into a JavaScript object
 // Ensure you have set up FIREBASE_CREDENTIALS in your .env file.
@@ -22,4 +27,5 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-module.exports = db;
+// module.exports = db;
+export default db;

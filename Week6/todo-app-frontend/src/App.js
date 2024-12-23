@@ -1,5 +1,5 @@
 // Import necessary modules from their respective packages
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AuthProvider } from "./contexts/AuthContext"; // Custom context for authentication
@@ -10,6 +10,7 @@ import theme from "./Theme"; // Custom theme settings
 
 // The main App component
 function App() {
+
   return (
     // The Router component from react-router-dom helps in handling different routes or pages
     <Router>
