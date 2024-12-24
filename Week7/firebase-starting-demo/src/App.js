@@ -41,9 +41,6 @@ function App() {
     } catch (error) {
       console.error("SIGNUP ERROR: ", error.message)
     }
-
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
-
   };
 
   const handleGoogleSignIn = async () => {
@@ -66,7 +63,6 @@ function App() {
     } catch (error) {
       console.error("SIGNOUT ERROR: ", error.message)
     }
-    await signOut(auth)
   };
 
   return (
@@ -79,14 +75,14 @@ function App() {
               <h3>Login</h3>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Email - Login"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
                 required
               />
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Password - Login"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
                 required
@@ -98,14 +94,14 @@ function App() {
               <h3>Sign Up</h3>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder="Email - Sign Up"
                 value={signupEmail}
                 onChange={(e) => setSignupEmail(e.target.value)}
                 required
               />
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Password - Sign Up"
                 value={signupPassword}
                 onChange={(e) => setSignupPassword(e.target.value)}
                 required
