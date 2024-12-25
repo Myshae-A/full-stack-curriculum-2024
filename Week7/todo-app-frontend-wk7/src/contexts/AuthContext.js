@@ -1,7 +1,15 @@
 // Importing necessary hooks and functionalities
 import React, { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from '../components/firebase';
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 // Creating a context for authentication. Contexts provide a way to pass data through 
 // the component tree without having to pass props down manually at every level.
 const AuthContext = createContext();
@@ -16,28 +24,52 @@ export const useAuth = () => {
 export function AuthProvider({ children }) {
     const navigate = useNavigate();
     
-    const [currentUser, setCurrentUser] = useState(localStorage.getItem('username'));
+    // const [currentUser, setCurrentUser] = useState(localStorage.getItem('user'));
+    const [currentUser, setCurrentUser] = useState(() => {
+        const storedUser = localStorage.getItem("user");
+        return storedUser ? JSON.parse(storedUser) : null;
+    })
     const [loginError, setLoginError] = useState(null);
 
-    const VALID_USERNAME = 'myshae'
-    const VALID_PASSWORD = 'racecar'
+    // const VALID_USERNAME = 'myshae'
+    // const VALID_PASSWORD = 'racecar'
 
-    // Login function that validates the provided username and password.
-    const login = (username, password) => {
-        if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-            setCurrentUser(username)
-            localStorage.setItem('username', username)
-            navigate('/') // navigate to main page
-        } else {
-            setLoginError('Invalid username or password')
-        }
+    // sign up new users
+    const register = (email, password) => {
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+        setCurrentUser(userCredential.user);
+        // correct and formal way of getting access token
+        userCredential.user.getIdToken().then((accessToken) => {
+            console.log(accessToken)
+        })
+        navigate("/");
+        })
+        .catch((error) => {
+        setLoginError(error.message);
+        });
     };
 
-    // Logout function to clear user data and redirect to the login page.
+    // Log in existing users
+    const login = (email, password) => {
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            setCurrentUser(userCredential.user);
+            // this method of retrieving access token also works
+            //console.log(userCredential.user.accessToken)
+            navigate("/");
+        })
+        .catch((error) => {
+            setLoginError(error.message);
+        });
+    };
+
+    // Sign out users
     const logout = () => {
-        setCurrentUser(null)
-        localStorage.removeItem('username')
-        navigate('/login') // navigate to login page
+        auth.signOut().then(() => {
+        setCurrentUser(null);
+        navigate("/login");
+        });
     };
 
     // An object containing our state and functions related to authentication.
@@ -46,7 +78,8 @@ export function AuthProvider({ children }) {
         currentUser,
         login,
         logout,
-        loginError
+        loginError,
+        register
     };
 
     // The AuthProvider component uses the AuthContext.Provider to wrap its children.

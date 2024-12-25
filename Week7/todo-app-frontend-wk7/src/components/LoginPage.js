@@ -9,6 +9,12 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useAuth } from "../contexts/AuthContext";
+import { auth } from "./firebase";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 
 function LoginPage() {
   // Access the MUI theme for potential theme-related functionalities.
@@ -20,19 +26,36 @@ function LoginPage() {
   const {loginError, login} = useAuth();  
 
   // State to hold the username and password entered by the user.
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  // const [user, setUser] = useState(null);
 
   // TODO: Handle login function.
-  const handleLogin = () => {
-    login(username, password)
+  const handleLogin = async () => {
+    login(email, password)
+  };
+
+  // const handleRegister = async (registerEmail, registerPassword, e) => {
+  //   register(registerEmail, registerPassword)
+  // }
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    // TODO: Add Firebase signup with email/password functionality here.
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword)
+      console.log('ACCOUNT CREATED: '+userCredential.user)
+    } catch (error) {
+      console.error("SIGNUP ERROR: ", error.message)
+    }
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 4,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -42,7 +65,7 @@ function LoginPage() {
           component="img"
           sx={{
             marginBottom: 2,
-            height: 200,
+            height: 100,
             width: 200,
           }}
           alt="UT Longhorn"
@@ -57,24 +80,24 @@ function LoginPage() {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
+            id="email"
+            label="Login Email"
             InputLabelProps={{ shrink: true }}
-            placeholder="admin"
+            placeholder="login email"
             autoFocus
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            label="Password"
+            label="Login Password"
             type="password"
             id="password"
             InputLabelProps={{ shrink: true }}
-            placeholder="racecar"
+            placeholder="login password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -87,6 +110,47 @@ function LoginPage() {
             onClick={handleLogin}
           >
             Login
+          </Button>
+        </Box>
+        <Typography component="h1" variant="h4" fontWeight="bold" sx={{ mt: 2 }}>
+          Register
+        </Typography>
+        <Box sx={{ mt: 1 }}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="registerEmail"
+            label="Register Email"
+            InputLabelProps={{ shrink: true }}
+            placeholder="register email"
+            autoFocus
+            value={registerEmail}
+            onChange={(e) => setRegisterEmail(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Register Password"
+            type="password"
+            id="registerPassword"
+            InputLabelProps={{ shrink: true }}
+            placeholder="register password"
+            value={registerPassword}
+            onChange={(e) => setRegisterPassword(e.target.value)}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleRegister}
+          >
+            Register
           </Button>
         </Box>
         {/* TODO: Display Login Error if it exists */}

@@ -14,6 +14,8 @@ import {
 import Header from "./Header";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { auth } from "./firebase";
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   query,
   collection,
@@ -30,41 +32,89 @@ import db from "./firebase";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const currentUser = useAuth();
-  //const [currentUser, setCurrentUser] = useState(useAuth());
-  //console.log(currentUser.currentUser)
+  //const currentUser = useAuth();
+  // const [currentUser, setCurrentUser] = useState(useAuth());
 
+  const [currentUser, setCurrentUser] = useState(null)
   // State to hold the list of tasks.
   const [taskList, setTaskList] = useState([]);
 
   // State for the task name being entered by the user.
   const [newTaskName, setNewTaskName] = useState("");
 
-  const [refreshCount, setRefreshCount] = useState(0);
+  const [rendering, setRendering] = useState(0);
+
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if(user) {
+        // console.log("user detected 1: "+user.uid);
+        setCurrentUser(user.uid)
+        
+      } else {
+        // console.log("no user detected 2: "+user.uid);
+        setCurrentUser(null)
+        navigate('/login');
+      }
+      setIsLoading(false);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [navigate]);
+
+  // console.log("88: "+currentUser)
 
   // TODO: Support retrieving your todo list from the API.
   // Currently, the tasks are hardcoded. You'll need to make an API call
   // to fetch the list of tasks instead of using the hardcoded data.
 
   useEffect(() => {
-    // fyi: this runs CONSTANTLY bc of taskList useState, but it was
-    // the only way i could get the tasks to render updated adds properly...
-    //console.log("use effect ran-through") 
-    if (!currentUser) {
+    let isMounted = true;
+    //console.log("use effect ran-through")
+    //console.log("is null 1? : "+(currentUser))
+    if (!isLoading && currentUser == null) {
       navigate('/login');
     } else {
-      fetch(`http://localhost:3001/tasks`)
-        .then((response) => response.json())
+      // fetch(`http://localhost:3001/users/${currentUser}/tasks`)
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     // console.log("new one here work")
+      //     // console.log(currentUser)
+      //     // console.log("is null 2? : "+(currentUser == null))
+          
+      //     setTaskList(data);
+      //     console.log("use effect here : "+data)
+      //     // setCurrentUser(currentUser)
+      //   })
+      //   .catch((error) => {
+      //     console.error('use effect FAILED TO FETCH: ', error);
+      //   })
+        fetch(`http://localhost:3001/users/${currentUser}/tasks`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
-          // console.log("new one here work")
-          setTaskList(data);
+          if(isMounted) {
+            setTaskList(data); // Update taskList with the fetched data
+            isMounted = false;
+            console.log("use effect here : "+data)
+          }
+          
         })
         .catch((error) => {
-          console.error('use effect FAILED TO FETCH: ', error);
-        })
+          console.error("'use effect FAILED TO FETCH: ", error);
+        });
     }
-  }, [taskList]);
+  }, [currentUser, rendering]);
 
+  // if (isLoading) {
+  //   return <div>Loading...</div>; // Show a loading indicator
+  // }
 
   // CREATE
   function handleAddTask() {
@@ -74,7 +124,8 @@ export default function HomePage() {
       // TODO: Support adding todo items to your todo list through the API.
       // In addition to updating the state directly, you should send a request
       // to the API to add a new task and then update the state based on the response.
-      fetch(`http://localhost:3001/tasks`, {
+      //console.log(currentUser.id);
+      fetch(`http://localhost:3001/users/${currentUser}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -82,18 +133,22 @@ export default function HomePage() {
         body: JSON.stringify({
           finished: false,
           name: newTaskName,
-          user: currentUser.currentUser
+          // user: currentUser.currentUser
           // should always be false when adding a new task (i think)
         }),
       })
         .then((response) => response.json())
         .then((data) => {
           setTaskList((prevTaskList) => [...prevTaskList, data]);
+          // console.log("handle add tak : "+taskList)
         })
         .catch((error) => {
-          console.error('FAILED TO POST: ', error);
+          // console.log("currentUser: "+currentUser)
+          // console.error('FAILED TO POST: ', error);
         })
         // setRefreshCount(refreshCount + 1)
+        setRendering(rendering + 1)
+        // console.log("rendering: "+rendering)
         setNewTaskName("") // clears the input field
         //console.log("new task added -- passed through")
     } else if (taskList.some((task) => task.name === newTaskName)) {
@@ -111,18 +166,20 @@ export default function HomePage() {
     // Similar to adding tasks, when checking off a task, you should send a request
     // to the API to update the task's status and then update the state based on the response.
 
-    fetch(`http://localhost:3001/tasks/${task.id}`, {
+    fetch(`http://localhost:3001/users/${currentUser}/tasks/${task.id}`, {
       method: 'DELETE'
     })
       .then(response => response.json())
       .then(() => {
         const updatedTaskList = taskList.filter((existingTask) => existingTask.id !== task.id)
         setTaskList(updatedTaskList)
+        // console.log("toggle task : "+taskList)
       })
       .catch((error) => {
-        console.error('FAILED TO DELETE: ', error);
+        // console.error('FAILED TO DELETE: ', error);
       })
-      console.log("task deleted -- passed through")
+      // console.log("task deleted -- passed through")
+      setRendering(rendering + 1)
   }
 
   // Function to compute a message indicating how many tasks are unfinished.

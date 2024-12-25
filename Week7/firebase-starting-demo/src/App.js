@@ -25,9 +25,9 @@ function App() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword)
       setUser(userCredential.user)
-      console.log('LOGIN SUCCESS'+userCredential.user)
+      // console.log('LOGIN SUCCESS'+userCredential.user)
     } catch (error) {
-      console.error("LOGIN ERROR: ", error.message)
+      // console.error("LOGIN ERROR: ", error.message)
     }
   };
 
@@ -37,9 +37,9 @@ function App() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
       setUser(userCredential.user)
-      console.log('ACCOUNT CREATED: '+userCredential.user)
+      // console.log('ACCOUNT CREATED: '+userCredential.user)
     } catch (error) {
-      console.error("SIGNUP ERROR: ", error.message)
+      // console.error("SIGNUP ERROR: ", error.message)
     }
   };
 
@@ -48,9 +48,9 @@ function App() {
     try {
       const userCredential = await signInWithPopup(auth, googleProvider)
       setUser(userCredential.user)
-      console.log('ACCOUNT CREATED WITH GOOGLE: '+userCredential.user)
+      // console.log('ACCOUNT CREATED WITH GOOGLE: '+userCredential.user)
     } catch (error) {
-      console.error("SIGNUP WITH GOOGLE ERROR: ", error.message)
+      // console.error("SIGNUP WITH GOOGLE ERROR: ", error.message)
     }
   };
 
@@ -59,9 +59,9 @@ function App() {
     try {
       await signOut(auth)
       setUser(null)
-      console.log("LOGGED OUT SUCCESSFULLY")
+      // console.log("LOGGED OUT SUCCESSFULLY")
     } catch (error) {
-      console.error("SIGNOUT ERROR: ", error.message)
+      // console.error("SIGNOUT ERROR: ", error.message)
     }
   };
 
