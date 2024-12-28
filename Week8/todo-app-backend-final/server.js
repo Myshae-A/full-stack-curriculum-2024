@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 //const bodyParser = require("body-parser");
 import cors from 'cors';
 //const cors = require("cors");
-
+console.log("testing")
 
 // Creating an instance of Express // created an express server
 const app = express();
